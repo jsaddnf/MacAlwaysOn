@@ -6,7 +6,7 @@ Keep your Mac awake while connected to power, then restore its previous sleep se
 
 MacAlwaysOn provides six native `.app` launchers and a command-line interface backed by a small Swift system service. It is intended for remote development, AI tools and long-running work on a Mac left on a ventilated desk.
 
-**v0.1.0 is a preview release.** Power toggling, restoration, service crash recovery, installation and removal have been tested. **Remote connectivity with the lid closed and no external display has not been physically verified.** Test your own device before unattended use. This utility does not provide remote access or guarantee continuous connectivity.
+**v0.1.0 is a preview release.** Power toggling, restoration, service crash recovery, installation and removal have been tested. On 2026-10-07, the local user reported **successful remote command execution after at least ten idle minutes with AC power connected, the lid closed and no external display**. System logs confirm an approximately 26-minute closed-lid interval with no sleep/wake records found. Another process also held `caffeinate` assertions, so the utility's effect has not been isolated. Test your own device before unattended use. This utility does not provide remote access or guarantee continuous connectivity.
 
 ## Requirements
 
@@ -106,7 +106,9 @@ These commands do not install a service or change real power settings. Tests use
 
 Validation includes 32 automated tests, local compilation and app signatures, real `SleepDisabled` changes from 0 to 1 and back to 0 with other settings unchanged, real service SIGKILL recovery, install/uninstall, and the status and existing-installation dialogs. Physical power-management checks were performed on the same control implementation before the public packaging changes.
 
-Closed-lid remote access, long idle connectivity, physical power disconnection, actual thermal stress and whole-machine reboot remain unverified. Automated tests of restoration logic are not substitutes for those hardware checks.
+Closed-lid remote execution after at least ten idle minutes was reported successful on one Apple Silicon Mac running macOS 26.4.1 on 2026-10-07. System power logs confirm an approximately 26-minute closed-lid interval with no sleep/wake events found; the remote command's own execution log was not independently checked. Another process held `caffeinate` assertions, so this establishes connectivity in that environment, not the utility's isolated effect or guaranteed sleep after disabling.
+
+The Mac used AC power for approximately the first 17 minutes of that interval, then switched to battery. Subsequent status showed automatic restoration with `SleepDisabled=0`, and the mode remained off after AC was reconnected. The entire closed-lid interval must not be treated as an enabled session. Only anonymized conclusions are published; raw system logs are kept out of the repository. Overnight connectivity, other hardware, actual thermal stress and whole-machine reboot remain unverified.
 
 For device acceptance, including personal use:
 
@@ -126,6 +128,8 @@ launchctl print system/com.halo.remote-power
 ./bin/remote-power doctor
 log show --last 10m --predicate 'process == "com.halo.remote-power"'
 ```
+
+macOS unified logging may redact the service's dynamic messages as `<private>`. Use `status` for its last event; timestamps alone do not establish an operation's result.
 
 If the service is failing while sleep is still disabled, open the lid and recover locally:
 
