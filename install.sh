@@ -8,7 +8,7 @@ state_dir='/Library/Application Support/RemotePower'
 runtime_dir='/private/var/run/com.halo.remote-power'
 plist_path="/Library/LaunchDaemons/${service_label}.plist"
 
-[[ $EUID -eq 0 ]] || { print -u2 '请双击 安装.app，由系统请求管理员授权。'; exit 1; }
+[[ $EUID -eq 0 ]] || { print -u2 '请打开 MacAlwaysOn.app 并点击“安装服务”，由系统请求管理员授权。'; exit 1; }
 [[ $# -eq 1 && $1 == <501-> ]] || { print -u2 '必须指定普通用户的数字 UID。'; exit 1; }
 target_uid="$1"
 /usr/bin/id -nu "$target_uid" >/dev/null
@@ -73,4 +73,4 @@ PLIST
 /bin/launchctl bootstrap system "$plist_path"
 installation_complete=1
 print '安装完成，远程运行模式默认关闭。'
-print '先运行 查看状态.app；准备好合盖测试后再运行 开启远程.app。'
+print '请在 MacAlwaysOn 窗口查看状态；准备好合盖测试后再点击“开启远程”。'

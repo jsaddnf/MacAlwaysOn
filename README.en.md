@@ -4,9 +4,9 @@ Keep your Mac awake while connected to power, then restore its previous sleep se
 
 [Latest release / Download](https://github.com/jsaddnf/MacAlwaysOn/releases/latest) · [简体中文](README.md) · [MIT License](LICENSE)
 
-MacAlwaysOn provides six native `.app` launchers and a command-line interface backed by a small Swift system service. It is intended for remote development, AI tools and long-running work on a Mac left on a ventilated desk.
+MacAlwaysOn provides **one native `MacAlwaysOn.app`** with installation, on/off controls, status, diagnostics and removal in the same window, plus an optional CLI. A small Swift system service manages power settings. It is intended for remote development, AI tools and long-running work on a Mac left on a ventilated desk.
 
-**v0.1.0 is the first public release; the project is still at an early stage.** Power toggling, restoration, service crash recovery, installation and removal have been tested. On 2026-10-07, the local user reported **successful remote command execution after at least ten idle minutes with AC power connected, the lid closed and no external display**. System logs confirm an approximately 26-minute closed-lid interval with no sleep/wake records found. Another process also held `caffeinate` assertions, so the utility's effect has not been isolated. Test your own device before unattended use. This utility does not provide remote access or guarantee continuous connectivity.
+**The current release is v0.2.0; the project is still at an early stage.** Power toggling, restoration, service crash recovery, installation and removal have been tested. On 2026-10-07, the local user reported **successful remote command execution after at least ten idle minutes with AC power connected, the lid closed and no external display**. System logs confirm an approximately 26-minute closed-lid interval with no sleep/wake records found. Another process also held `caffeinate` assertions, so the utility's effect has not been isolated. Test your own device before unattended use. This utility does not provide remote access or guarantee continuous connectivity.
 
 ## Requirements
 
@@ -20,31 +20,35 @@ Applications use **ad-hoc signatures**, without Developer ID signing or Apple no
 
 ## Install and use
 
-1. Download `MacAlwaysOn-v0.1.0-macos-arm64.zip` from [Releases](https://github.com/jsaddnf/MacAlwaysOn/releases/tag/v0.1.0) and extract it.
-2. Open `安装.app` and authorize installation using the macOS administrator prompt. The mode starts **off**.
-3. Open `查看状态.app` to check the service.
-4. Connect power and open `开启远程.app`. Open `关闭远程.app` when finished.
+1. Download `MacAlwaysOn-v0.2.0-macos-arm64.zip` from [Releases](https://github.com/jsaddnf/MacAlwaysOn/releases/latest) and extract it into a fresh folder.
+2. Open **MacAlwaysOn.app**. You may move this single app to Applications.
+3. Click **安装服务** (Install service) and authorize installation using the macOS administrator prompt. The mode starts **off**. An existing v0.1.0 service is recognized automatically and does not need reinstalling.
+4. Connect power and click **开启远程** (Enable). Click **关闭远程** (Disable) when finished.
 
-The launchers currently display Chinese text:
+The window currently displays Chinese text:
 
-| Launcher | Action |
+| Button | Action |
 | --- | --- |
-| `安装.app` | Install; show status if already installed |
-| `电源模式.app` | Toggle on/off |
-| `开启远程.app` | Enable |
-| `关闭远程.app` | Disable and restore |
-| `查看状态.app` | Show status |
-| `卸载.app` | Restore settings and uninstall |
+| 安装服务 | Install; show an installed indicator if the service exists |
+| 开启远程 | Enable |
+| 关闭远程 | Disable and restore |
+| 刷新状态 | Refresh status |
+| 检查休眠原因 | Open an in-app diagnostics sheet with a copy button |
+| 卸载服务 | Confirm, restore settings and uninstall |
 
-Each app includes its own scripts and can be moved independently. The apps bypass interactive Terminal startup, including Oh My Zsh update prompts. Installation and removal require administrator authorization; routine control by the installing user does not.
+All actions share one app identity, rather than requiring separate Gatekeeper exceptions for six apps. First download or a new app version can still require approval to open. Installation and removal still require administrator authorization; routine control does not. The utility does not change Gatekeeper or global privacy settings.
+
+Scripts are embedded in the app, bypassing interactive Terminal startup and Oh My Zsh prompts. Status is read at launch, on activation and after an operation; it includes a timestamp and a manual refresh button. Closing the window does not turn off an enabled background mode.
 
 Download the matching `.zip.sha256` file to verify the archive:
 
 ```sh
-shasum -a 256 -c MacAlwaysOn-v0.1.0-macos-arm64.zip.sha256
+shasum -a 256 -c MacAlwaysOn-v0.2.0-macos-arm64.zip.sha256
 ```
 
-To upgrade, disable the mode, uninstall the old version, then install the new one. The installer deliberately does not overwrite an existing service or recovery record. Earlier RemotePower builds use the same service identifier and must be removed first. Deleting the downloaded folder does **not** uninstall the service.
+**Upgrading from v0.1.0:** use the new `MacAlwaysOn.app` directly with the existing compatible service. The six old launcher apps can be deleted; reinstalling the service is unnecessary for this update. Earlier RemotePower builds share the service identifier.
+
+To remove the service, click **卸载服务** in the app and authorize the operation. For future updates that replace the backend, disable the mode, uninstall the service, then install the new version. The installer does not silently overwrite an existing service or recovery record. Deleting the app or downloaded folder does **not** uninstall the service.
 
 ## CLI
 
@@ -61,7 +65,7 @@ From the extracted or built directory:
 
 `doctor` only reads system settings and sleep assertions; it also works before installation. Once installed, the executable is available at `/Library/PrivilegedHelperTools/com.halo.remote-power`.
 
-For terminal installation, run `sudo /bin/zsh -f ./install.sh "$(id -u)"` from a normal user's shell. To uninstall, run `sudo /bin/zsh -f ./uninstall.sh` instead.
+For terminal installation from a source build, run `sudo /bin/zsh -f ./install.sh "$(id -u)"` from a normal user's shell. To uninstall, run `sudo /bin/zsh -f ./uninstall.sh` instead.
 
 ## What changes
 
@@ -102,9 +106,9 @@ cd MacAlwaysOn
 ./package.sh
 ```
 
-These commands do not install a service or change real power settings. Tests use memory and temporary files. `package.sh` rebuilds and produces an arm64 ZIP and checksum under `dist/`, including applications, sources, tests, documentation, license and a per-file checksum manifest. The version is read from `VERSION`.
+These commands do not install a service or change real power settings. Tests use memory and temporary files. `App/main.swift` contains the SwiftUI window; the existing `build-launchers.sh` name is retained, but it now builds only `MacAlwaysOn.app`. `package.sh` produces an arm64 ZIP and checksum under `dist/`, including one app, an optional CLI, documentation, license and a per-file checksum manifest. Sources and tests are available through Git or GitHub's Source code archive. The version is read from `VERSION`.
 
-Validation includes 32 automated tests, local compilation and app signatures, real `SleepDisabled` changes from 0 to 1 and back to 0 with other settings unchanged, real service SIGKILL recovery, install/uninstall, and the status and existing-installation dialogs. Physical power-management checks were performed on the same control implementation before the public packaging changes.
+Validation includes 32 automated tests, local compilation and app signatures, real `SleepDisabled` changes from 0 to 1 and back to 0 with other settings unchanged, real service SIGKILL recovery and install/uninstall. The v0.2.0 unified window has been checked for existing-service detection, status, actual enable/disable, diagnostics and cancelling uninstall. The earlier physical checks use the same unchanged power-control implementation.
 
 Closed-lid remote execution after at least ten idle minutes was reported successful on one Apple Silicon Mac running macOS 26.4.1 on 2026-10-07. System power logs confirm an approximately 26-minute closed-lid interval with no sleep/wake events found; the remote command's own execution log was not independently checked. Another process held `caffeinate` assertions, so this establishes connectivity in that environment, not the utility's isolated effect or guaranteed sleep after disabling.
 

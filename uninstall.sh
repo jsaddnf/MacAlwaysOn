@@ -7,7 +7,7 @@ state_dir='/Library/Application Support/RemotePower'
 runtime_dir='/private/var/run/com.halo.remote-power'
 plist_path="/Library/LaunchDaemons/${service_label}.plist"
 
-[[ $EUID -eq 0 ]] || { print -u2 '请双击 卸载.app，由系统请求管理员授权。'; exit 1; }
+[[ $EUID -eq 0 ]] || { print -u2 '请打开 MacAlwaysOn.app 并点击“卸载服务”，由系统请求管理员授权。'; exit 1; }
 [[ $# -eq 0 ]] || { print -u2 '卸载不接受参数。'; exit 1; }
 for target_path in "$helper_path" "$state_dir" "$runtime_dir" "$plist_path"; do
   [[ ! -L "$target_path" ]] || { print -u2 "路径异常，停止卸载：$target_path"; exit 1; }

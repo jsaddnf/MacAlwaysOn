@@ -142,7 +142,7 @@ func sendControlCommand(_ command: String, path: String, expectedServerUID: uid_
         }
     }
     guard result == 0 else {
-        throw PowerModeError("无法连接后台程序。首次使用请运行“安装.app”；已安装则检查 launchctl 状态。")
+        throw PowerModeError("无法连接后台程序。首次使用请打开 MacAlwaysOn.app 并点击“安装服务”；已安装则检查 launchctl 状态。")
     }
     var user: uid_t = 0
     var group: gid_t = 0

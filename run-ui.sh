@@ -43,7 +43,7 @@ APPLESCRIPT
   on|off|toggle|status|doctor)
     if [[ ! -x "$helper_path" ]]; then
       if [[ "$1" == doctor ]]; then "$bundle_dir/bin/remote-power" doctor; exit; fi
-      print -u2 '请先双击 安装.app。'; exit 1
+      print -u2 '请先打开 MacAlwaysOn.app 并点击“安装服务”。'; exit 1
     fi
     "$helper_path" "$1"
     ;;

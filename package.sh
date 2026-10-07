@@ -13,18 +13,13 @@ trap '/bin/rm -rf "$stage_dir"' EXIT
 /bin/zsh -f "$bundle_dir/build-launchers.sh"
 
 product_dir="$stage_dir/MacAlwaysOn"
-/bin/mkdir -p "$product_dir/bin" "$product_dir/Sources" "$product_dir/Tests" "$bundle_dir/dist"
-for file in README.md README.en.md LICENSE CHANGELOG.md CONTRIBUTING.md VERSION \
-            build.sh build-launchers.sh run-tests.sh run-ui.sh install.sh uninstall.sh package.sh; do
+/bin/mkdir -p "$product_dir/bin" "$bundle_dir/dist"
+for file in README.md README.en.md LICENSE CHANGELOG.md CONTRIBUTING.md VERSION; do
   /bin/cp "$bundle_dir/$file" "$product_dir/$file"
 done
-/bin/cp "$bundle_dir/Sources/"*.swift "$product_dir/Sources/"
-/bin/cp "$bundle_dir/Tests/main.swift" "$product_dir/Tests/"
 /bin/cp "$bundle_dir/bin/remote-power" "$product_dir/bin/"
-for title in 安装 电源模式 开启远程 关闭远程 查看状态 卸载; do
-  /usr/bin/ditto --norsrc --noextattr --noacl "$bundle_dir/$title.app" "$product_dir/$title.app"
-  /usr/bin/codesign --verify --deep --strict "$product_dir/$title.app"
-done
+/usr/bin/ditto --norsrc --noextattr --noacl "$bundle_dir/MacAlwaysOn.app" "$product_dir/MacAlwaysOn.app"
+/usr/bin/codesign --verify --deep --strict "$product_dir/MacAlwaysOn.app"
 
 (
   cd "$product_dir"
