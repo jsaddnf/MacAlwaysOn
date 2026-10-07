@@ -1,0 +1,11 @@
+.DS_Store
+._*
+/bin/
+/dist/
+/*.app/
+/SHA256SUMS
+/Tests/last-run.txt
+*.dSYM/
+*.log
+.env
+.env.*
