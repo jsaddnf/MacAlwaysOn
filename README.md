@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/jsaddnf/MacAlwaysOn/main/App/Assets/AppIcon.png" width="96" height="96" alt="MacAlwaysOn">
+
 # MacAlwaysOn
 
 接电时一键保持 Mac 唤醒，用完恢复原来的睡眠设置。
@@ -6,7 +8,7 @@
 
 MacAlwaysOn 适合需要让 Mac 留在桌面上运行远程开发、AI 工具或长任务的人。**从 v0.2.0 起，只需打开一个 `MacAlwaysOn.app`**，即可在同一窗口安装、开启、关闭、查看状态、诊断和卸载。应用直接连接小型 Swift 后台程序，由后台负责保存、修改和恢复电源设置；同时保留可选命令行接口。
 
-**当前版本为 v0.2.0，项目仍处于早期阶段。** 已验证开关、恢复、辅助程序崩溃恢复和安装卸载。2026-10-07 本机用户反馈：**接电、无外接显示器，合盖并至少空闲 10 分钟后仍可执行远程命令**；系统日志确认本次合盖约 26 分钟，其间未查到睡眠或唤醒记录。不过，同机还存在其他 `caffeinate` 防休眠请求，尚未完成排除其影响的对照测试。请先在自己的设备上验收，再用于无人值守任务；本工具不提供远程连接服务，也不保证电脑永远在线。
+**当前版本为 v0.2.1，项目仍处于早期阶段。** 已验证开关、恢复、辅助程序崩溃恢复和安装卸载。2026-10-07 本机用户反馈：**接电、无外接显示器，合盖并至少空闲 10 分钟后仍可执行远程命令**；系统日志确认本次合盖约 26 分钟，其间未查到睡眠或唤醒记录。不过，同机还存在其他 `caffeinate` 防休眠请求，尚未完成排除其影响的对照测试。请先在自己的设备上验收，再用于无人值守任务；本工具不提供远程连接服务，也不保证电脑永远在线。
 
 ## 能做什么
 
@@ -31,7 +33,7 @@ MacAlwaysOn 适合需要让 Mac 留在桌面上运行远程开发、AI 工具或
 
 ## 下载与安装
 
-1. 在 [Releases](https://github.com/jsaddnf/MacAlwaysOn/releases/latest) 下载 `MacAlwaysOn-v0.2.0-macos-arm64.zip`，解压到新文件夹。
+1. 在 [Releases](https://github.com/jsaddnf/MacAlwaysOn/releases/latest) 下载 `MacAlwaysOn-v0.2.1-macos-arm64.zip`，解压到新文件夹。
 2. 双击 **MacAlwaysOn.app**。可以将这一个应用拖到“应用程序”文件夹中使用。
 3. 首次使用，在窗口中点击 **安装服务**，在 macOS 系统授权窗口输入管理员密码。安装后默认关闭；已经安装 v0.1.0 后台服务时会自动识别，无需重新安装。
 4. 接通电源，在同一窗口点击 **开启远程**。使用结束后点击 **关闭远程**。
@@ -39,7 +41,7 @@ MacAlwaysOn 适合需要让 Mac 留在桌面上运行远程开发、AI 工具或
 可同时下载 `.zip.sha256` 文件，在下载目录核对压缩包：
 
 ```sh
-shasum -a 256 -c MacAlwaysOn-v0.2.0-macos-arm64.zip.sha256
+shasum -a 256 -c MacAlwaysOn-v0.2.1-macos-arm64.zip.sha256
 ```
 
 如果 macOS 因未验证开发者阻止打开，请先核对下载来源和校验值，再参考 [Apple 的应用安全打开说明](https://support.apple.com/zh-cn/102445)，或按下文从源码构建。校验值用于检查文件完整性，不等同于 Apple 公证。
@@ -61,7 +63,7 @@ shasum -a 256 -c MacAlwaysOn-v0.2.0-macos-arm64.zip.sha256
 
 ### 升级与卸载
 
-**从 v0.1.0 升级到 v0.2.0：** 电源控制协议和后台逻辑保持兼容，直接使用新的 `MacAlwaysOn.app` 即可。旧的六个 `.app` 入口可以删除，不需要卸载后台服务或重复申请六次允许打开。
+**从 v0.1.0 或 v0.2.0 升级到 v0.2.1：** 电源控制协议和后台逻辑保持兼容，直接使用新的 `MacAlwaysOn.app` 即可。旧的六个 `.app` 入口可以删除，不需要卸载后台服务或重复申请六次允许打开。
 
 不再使用时，在 `MacAlwaysOn.app` 中点击“卸载服务”，确认后完成管理员授权。**不要仅删除应用或下载文件夹来卸载**，也不要在模式开启时手动删除系统服务或恢复记录。
 
@@ -145,6 +147,8 @@ cd MacAlwaysOn
 ```
 
 这些步骤只编译、生成应用并运行模拟测试，不安装后台服务，不修改真实电源设置。构建结果为 `bin/remote-power` 和根目录中的一个 `MacAlwaysOn.app`。`App/main.swift` 负责 SwiftUI 窗口；原有 `build-launchers.sh` 名称保留，但现在只构建单一应用。
+
+应用图标资源位于 `App/Assets/`，包含完整尺寸的 `.icns` 和 PNG 预览。修改 `RenderIcon.swift` 后运行 `./build-icon.sh` 可重新生成图标，再重新构建应用；只使用系统 AppKit 和 `iconutil`，无需额外安装绘图工具。
 
 生成完整安装包：
 

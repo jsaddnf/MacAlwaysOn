@@ -188,9 +188,10 @@ struct MainView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             HStack(spacing: 14) {
-                Image(systemName: "power.circle.fill")
-                    .font(.system(size: 44))
-                    .foregroundStyle(snapshot?.modeEnabled == true ? Color.green : Color.secondary)
+                Image(nsImage: NSApplication.shared.applicationIconImage)
+                    .resizable()
+                    .interpolation(.high)
+                    .frame(width: 52, height: 52)
                     .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 4) {
                     Text("MacAlwaysOn").font(.title2.bold())

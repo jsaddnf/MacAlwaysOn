@@ -5,6 +5,7 @@ bundle_dir="${0:A:h}"
 version="$(<"$bundle_dir/VERSION")"
 [[ "$version" =~ '^[0-9]+\.[0-9]+\.[0-9]+$' ]] || { print -u2 'VERSION 必须为 x.y.z。'; exit 1; }
 [[ -x "$bundle_dir/bin/remote-power" ]] || { print -u2 '请先运行 ./build.sh。'; exit 1; }
+[[ -f "$bundle_dir/App/Assets/AppIcon.icns" ]] || { print -u2 '缺少应用图标，请先运行 ./build-icon.sh。'; exit 1; }
 build_dir="$(/usr/bin/mktemp -d /private/tmp/mac-always-on-app.XXXXXX)"
 trap '/bin/rm -rf "$build_dir"' EXIT
 app_path="$bundle_dir/MacAlwaysOn.app"
@@ -27,6 +28,7 @@ fi
   <key>CFBundleName</key><string>MacAlwaysOn</string>
   <key>CFBundleDisplayName</key><string>MacAlwaysOn</string>
   <key>CFBundleExecutable</key><string>MacAlwaysOn</string>
+  <key>CFBundleIconFile</key><string>AppIcon.icns</string>
   <key>CFBundlePackageType</key><string>APPL</string>
   <key>CFBundleShortVersionString</key><string>$version</string>
   <key>CFBundleVersion</key><string>$version</string>
@@ -34,6 +36,7 @@ fi
   <key>NSHighResolutionCapable</key><true/>
 </dict></plist>
 PLIST
+/bin/cp "$bundle_dir/App/Assets/AppIcon.icns" "$app_path/Contents/Resources/"
 /bin/cp "$bundle_dir/"{run-ui.sh,install.sh,uninstall.sh} "$app_path/Contents/Resources/Payload/"
 /bin/cp "$bundle_dir/bin/remote-power" "$app_path/Contents/Resources/Payload/bin/"
 /usr/bin/plutil -lint "$app_path/Contents/Info.plist"
