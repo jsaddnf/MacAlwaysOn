@@ -2,11 +2,11 @@
 
 Keep your Mac awake while connected to power, then restore its previous sleep setting when you are done.
 
-[Download](https://github.com/jsaddnf/MacAlwaysOn/releases/tag/v0.1.0) · [简体中文](README.md) · [MIT License](LICENSE)
+[Latest release / Download](https://github.com/jsaddnf/MacAlwaysOn/releases/latest) · [简体中文](README.md) · [MIT License](LICENSE)
 
 MacAlwaysOn provides six native `.app` launchers and a command-line interface backed by a small Swift system service. It is intended for remote development, AI tools and long-running work on a Mac left on a ventilated desk.
 
-**v0.1.0 is a preview release.** Power toggling, restoration, service crash recovery, installation and removal have been tested. On 2026-10-07, the local user reported **successful remote command execution after at least ten idle minutes with AC power connected, the lid closed and no external display**. System logs confirm an approximately 26-minute closed-lid interval with no sleep/wake records found. Another process also held `caffeinate` assertions, so the utility's effect has not been isolated. Test your own device before unattended use. This utility does not provide remote access or guarantee continuous connectivity.
+**v0.1.0 is the first public release; the project is still at an early stage.** Power toggling, restoration, service crash recovery, installation and removal have been tested. On 2026-10-07, the local user reported **successful remote command execution after at least ten idle minutes with AC power connected, the lid closed and no external display**. System logs confirm an approximately 26-minute closed-lid interval with no sleep/wake records found. Another process also held `caffeinate` assertions, so the utility's effect has not been isolated. Test your own device before unattended use. This utility does not provide remote access or guarantee continuous connectivity.
 
 ## Requirements
 

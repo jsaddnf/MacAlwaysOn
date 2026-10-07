@@ -2,7 +2,7 @@
 
 ## 0.1.0 — 2026-10-07
 
-首个开源预览版，面向 Apple Silicon / macOS 26。
+首个开源公开版本，面向 Apple Silicon / macOS 26。发布状态已从 Pre-release 调整为 Release，并设为 Latest；安装包内容和校验值保持不变。
 
 - 提供安装、开关、明确开启、明确关闭、查看状态和卸载六个原生应用入口。
 - 提供 Swift 辅助程序、命令行接口和 JSON 状态输出。
